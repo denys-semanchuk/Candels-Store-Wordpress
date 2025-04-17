@@ -49,7 +49,7 @@ function candels_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
-			'menu-1' => esc_html__( 'Primary', 'candels' ),
+			'header-menu' => esc_html__( 'Primary', 'candels' ),
 		)
 	);
 
@@ -138,16 +138,56 @@ add_action( 'widgets_init', 'candels_widgets_init' );
  * Enqueue scripts and styles.
  */
 function candels_scripts() {
-	wp_enqueue_style( 'candels-style', get_stylesheet_uri(), array(), _S_VERSION );
-	wp_style_add_data( 'candels-style', 'rtl', 'replace' );
+    // Основной style.css темы (обязателен для WordPress)
+    wp_enqueue_style( 
+        'candels-style', 
+        get_stylesheet_uri(), 
+        array(), 
+        filemtime( get_stylesheet_directory() . '/style.css' ) // Автоверсия
+    );
 
-	wp_enqueue_script( 'candels-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+    // Ваши кастомные стили (main.css)
+    wp_enqueue_style( 
+        'candels-main-style', 
+        get_template_directory_uri() . '/css/main.css', 
+        array('candels-style'), // Зависит от основного стиля
+        filemtime( get_template_directory() . '/css/main.css' ) // Автоверсия
+    );
+	wp_enqueue_style( 
+        'candels-reset-style', 
+        get_template_directory_uri() . '/css/reset.css', 
+        array('candels-style'), // Зависит от основного стиля
+        filemtime( get_template_directory() . '/css/reset.css' ) // Автоверсия
+    );
 
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
+    // RTL-стили (если нужно)
+    wp_style_add_data( 'candels-style', 'rtl', 'replace' );
+
+    // Скрипты
+    wp_enqueue_script( 
+        'candels-navigation', 
+        get_template_directory_uri() . '/js/navigation.js', 
+        array(), 
+        filemtime( get_template_directory() . '/js/navigation.js' ), 
+        true 
+    );
+
+	wp_enqueue_script(
+        'candels-main', // Handle
+        get_template_directory_uri() . '/js/main.js', // Path to file
+        array(), // Dependencies (e.g., 'jquery')
+        filemtime(get_template_directory() . '/js/main.js'), // Version
+        true // Load in footer?
+    );
+
+
+    // Комментарии
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+        wp_enqueue_script( 'comment-reply' );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'candels_scripts' );
+
 
 /**
  * Implement the Custom Header feature.

@@ -22,12 +22,12 @@
       href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Yeseva+One&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/reset.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="styles/main.css" />
+
+    <?php wp_head(); ?>
   </head>
 
   <body>
@@ -44,26 +44,20 @@
             <span></span>
             <span></span>
           </button>
-          <ul class="menu__list header__menu-list">
-            <li class="menu__list-item">
-              <a href="#" class="menu__list-link">About Us</a>
-            </li>
-            <li class="menu__list-item">
-              <a href="#" class="menu__list-link">Catalog</a>
-            </li>
-            <li class="menu__list-item">
-              <a href="#" class="menu__list-link">Team</a>
-            </li>
-            <li class="menu__list-item">
-              <a href="#" class="menu__list-link">Reviews</a>
-            </li>
-            <li class="menu__list-item">
-              <a href="#" class="menu__list-link">Courses</a>
-            </li>
-            <li class="menu__list-item">
+            <?php
+            wp_nav_menu(
+              array(
+                  'theme_location' => 'header-menu',
+                  'menu_class'     => 'menu__list header__menu',
+                  'container'      => false,
+                  'fallback_cb'    => false
+              )
+          );
+      
+            ?>
+            <!-- <li class="menu__list-item">
               <a href="#" class="menu__list-link">Contacts</a>
-            </li>
-          </ul>
+            </li> -->
         </nav>
         <a class="phone" href="tel:+4565789876">+45 65 78 98 76</a>
       </div>
